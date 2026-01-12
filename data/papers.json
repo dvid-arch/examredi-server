@@ -1,0 +1,126 @@
+[
+  {
+    "id": "jamb-english-2014",
+    "exam": "JAMB",
+    "subject": "English",
+    "year": 2014,
+    "questions": [
+      {
+        "id": "eng1-14",
+        "question": "Choose the option that is nearest in meaning to the word \"ephemeral\".",
+        "options": {
+          "A": {
+            "text": "Everlasting"
+          },
+          "B": {
+            "text": "Short-lived"
+          },
+          "C": {
+            "text": "Beautiful"
+          },
+          "D": {
+            "text": "Powerful"
+          }
+        },
+        "answer": "B",
+        "explanation": "Ephemeral means lasting for a very short time."
+      },
+      {
+        "id": "eng2-14",
+        "question": "From the words lettered A to D, choose the word that best completes the sentence: The suspect was ____ of all charges.",
+        "options": {
+          "A": {
+            "text": "acquitted"
+          },
+          "B": {
+            "text": "convicted"
+          },
+          "C": {
+            "text": "accused"
+          },
+          "D": {
+            "text": "sentenced"
+          }
+        },
+        "answer": "A",
+        "explanation": "To be acquitted means to be declared not guilty of a charge."
+      }
+    ]
+  },
+  {
+    "id": "jamb-mathematics-2014",
+    "exam": "JAMB",
+    "subject": "Mathematics",
+    "year": 2014,
+    "questions": [
+      {
+        "id": "math1-14",
+        "question": "If 2x + 5 = 15, what is the value of x?",
+        "options": {
+          "A": {
+            "text": "5"
+          },
+          "B": {
+            "text": "10"
+          },
+          "C": {
+            "text": "7.5"
+          },
+          "D": {
+            "text": "2.5"
+          }
+        },
+        "answer": "A",
+        "explanation": "Subtract 5 from both sides: 2x = 10. Divide by 2: x = 5."
+      },
+      {
+        "id": "math2-14",
+        "question": "What is the area of a circle with a radius of 7cm? (Use pi = 22/7)",
+        "options": {
+          "A": {
+            "text": "154 cm^2"
+          },
+          "B": {
+            "text": "44 cm^2"
+          },
+          "C": {
+            "text": "49 cm^2"
+          },
+          "D": {
+            "text": "144 cm^2"
+          }
+        },
+        "answer": "A",
+        "explanation": "Area = pi * r^2 = (22/7) * 7 * 7 = 154 cm^2."
+      }
+    ]
+  },
+  {
+    "id": "jamb-biology-2014",
+    "exam": "JAMB",
+    "subject": "Biology",
+    "year": 2014,
+    "questions": [
+      {
+        "id": "bio1-14",
+        "question": "What is the primary site of photosynthesis in a plant?",
+        "options": {
+          "A": {
+            "text": "Roots"
+          },
+          "B": {
+            "text": "Stem"
+          },
+          "C": {
+            "text": "Leaf"
+          },
+          "D": {
+            "text": "Flower"
+          }
+        },
+        "answer": "C",
+        "explanation": "Photosynthesis primarily occurs in the leaves, specifically in the chloroplasts of mesophyll cells."
+      }
+    ]
+  }
+]
