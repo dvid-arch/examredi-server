@@ -32,6 +32,15 @@ app.get('/', (req: Request, res: Response) => {
     res.send('ExamRedi Backend API is running');
 });
 
+// Health check endpoint for Render/Monitoring
+app.get('/health', (req: Request, res: Response) => {
+    res.status(200).json({ 
+        status: 'UP', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // Routes
 import authRoutes from './routes/authRoutes';
 app.use('/auth', authRoutes);
