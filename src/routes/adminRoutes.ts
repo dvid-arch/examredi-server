@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getAdminStats, getAllUsers, updateUserSubscription, deleteUser, saveUser, getAllPapers, deletePaper, savePaper, getAllGuides, deleteGuide, saveGuide } from '../controllers/adminController';
-import { authenticate, authorizeAdmin } from '../middleware/auth';
+import { getAdminStats, getAllUsers, updateUserSubscription, deleteUser, saveUser, getAllPapers, deletePaper, savePaper, getAllGuides, deleteGuide, saveGuide } from '../controllers/adminController.js';
+import { authenticate, authorizeAdmin } from '../middleware/auth.js';
 
 const router = Router();
 

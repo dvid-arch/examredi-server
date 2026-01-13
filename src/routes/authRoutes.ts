@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { login, register, refreshToken, logout, getProfile } from '../controllers/authController';
-import { authenticate } from '../middleware/auth';
-import { 
-  validateRegister, 
-  validateLogin, 
-  validateRefreshToken 
-} from '../middleware/validation';
-import { handleValidationErrors } from '../middleware/errorHandler';
+import { login, register, refreshToken, logout, getProfile } from '../controllers/authController.js';
+import { authenticate } from '../middleware/auth.js';
+import {
+  validateRegister,
+  validateLogin,
+  validateRefreshToken
+} from '../middleware/validation.js';
+import { handleValidationErrors } from '../middleware/errorHandler.js';
 
 const router = Router();
 

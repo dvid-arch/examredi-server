@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { chatWithAI, generateStudyGuide, researchTopic } from '../controllers/aiController';
-import { authenticate } from '../middleware/auth';
-import { validateAIChat, validateGenerateGuide, validateResearchTopic } from '../middleware/validation';
-import { handleValidationErrors } from '../middleware/errorHandler';
+import { chatWithAI, generateStudyGuide, researchTopic } from '../controllers/aiController.js';
+import { authenticate } from '../middleware/auth.js';
+import { validateAIChat, validateGenerateGuide, validateResearchTopic } from '../middleware/validation.js';
+import { handleValidationErrors } from '../middleware/errorHandler.js';
 
 const router = Router();
 

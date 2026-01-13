@@ -1,15 +1,15 @@
+import 'dotenv/config';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config();
+import { getPort, getAllowedOrigins } from './config.js';
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5000').split(',');
+const port = getPort();
+const allowedOrigins = getAllowedOrigins();
 
 // Security Middleware
 app.use(helmet());
@@ -34,25 +34,25 @@ app.get('/', (req: Request, res: Response) => {
 
 // Health check endpoint for Render/Monitoring
 app.get('/health', (req: Request, res: Response) => {
-    res.status(200).json({ 
-        status: 'UP', 
+    res.status(200).json({
+        status: 'UP',
         timestamp: new Date().toISOString(),
         uptime: process.uptime()
     });
 });
 
 // Routes
-import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/authRoutes.js';
 app.use('/auth', authRoutes);
-import dataRoutes from './routes/dataRoutes';
+import dataRoutes from './routes/dataRoutes.js';
 app.use('/data', dataRoutes);
-import aiRoutes from './routes/aiRoutes';
+import aiRoutes from './routes/aiRoutes.js';
 app.use('/ai', aiRoutes);
-import adminRoutes from './routes/adminRoutes';
+import adminRoutes from './routes/adminRoutes.js';
 app.use('/admin', adminRoutes);
 
 // Database Initialization (Mock)
-import { initializeData } from './repositories/dataStore';
+import { initializeData } from './repositories/dataStore.js';
 initializeData();
 
 

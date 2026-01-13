@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { readData, writeData, FILE_NAMES } from '../repositories/dataStore';
+import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
 
 // Stats
 export const getAdminStats = (req: Request, res: Response) => {

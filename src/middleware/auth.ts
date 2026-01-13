@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { TokenPayload } from '../types';
+import { TokenPayload } from '../types/index.js';
+import { getSecretKey } from '../config.js';
 
-const SECRET_KEY = process.env.JWT_SECRET;
 
-if (!SECRET_KEY) {
-  throw new Error('JWT_SECRET environment variable is required');
-}
 
 export interface AuthRequest extends Request {
     user?: TokenPayload;
@@ -15,7 +12,7 @@ export interface AuthRequest extends Request {
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        return res.status(401).json({ 
+        return res.status(401).json({
             success: false,
             message: 'Unauthorized',
             error: 'Authorization header is missing',
@@ -25,7 +22,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
     const token = authHeader.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ 
+        return res.status(401).json({
             success: false,
             message: 'Unauthorized',
             error: 'Bearer token is missing',
@@ -33,9 +30,9 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
         });
     }
 
-    jwt.verify(token, SECRET_KEY!, (err: any, decoded: any) => {
+    jwt.verify(token, getSecretKey(), (err: any, decoded: any) => {
         if (err) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 success: false,
                 message: 'Token verification failed',
                 error: err.message === 'jwt expired' ? 'Token has expired' : 'Invalid token',
@@ -49,7 +46,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
 export const authorizeAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user || req.user.role !== 'admin') {
-        return res.status(403).json({ 
+        return res.status(403).json({
             success: false,
             message: 'Forbidden',
             error: 'Admin access is required',

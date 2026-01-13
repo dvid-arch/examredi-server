@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { readData, writeData, FILE_NAMES } from '../repositories/dataStore';
-import { AuthRequest } from '../middleware/auth';
-import { PerformanceEntry, User, Paper, Guide, RecentActivity } from '../types';
+import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
+import { AuthRequest } from '../middleware/auth.js';
+import { PerformanceEntry, User, Paper, Guide, RecentActivity } from '../types/index.js';
 
 export const getPerformance = (req: AuthRequest, res: Response) => {
     if (!req.user) {

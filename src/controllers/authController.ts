@@ -1,22 +1,17 @@
 import { Request, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
-import { readData, writeData, FILE_NAMES } from '../repositories/dataStore';
-import { User, UserWithoutPassword, TokenPayload } from '../types';
+import { AuthRequest } from '../middleware/auth.js';
+import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
+import { User, UserWithoutPassword, TokenPayload } from '../types/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.JWT_SECRET;
-const REFRESH_SECRET_KEY = process.env.JWT_REFRESH_SECRET;
-
-if (!SECRET_KEY || !REFRESH_SECRET_KEY) {
-    throw new Error('JWT_SECRET and JWT_REFRESH_SECRET environment variables are required');
-}
+import { getSecretKey, getRefreshSecretKey } from '../config.js';
 
 // Helper to generate tokens
 const generateTokens = (user: User) => {
     const payload: TokenPayload = { id: user.id, email: user.email, role: user.role };
-    const accessToken = jwt.sign(payload, SECRET_KEY!, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET_KEY!, { expiresIn: '7d' });
+    const accessToken = jwt.sign(payload, getSecretKey(), { expiresIn: '15m' });
+    const refreshToken = jwt.sign({ id: user.id }, getRefreshSecretKey(), { expiresIn: '7d' });
     return { accessToken, refreshToken };
 };
 
@@ -134,7 +129,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
         }
 
         // Verify refresh token
-        jwt.verify(token, REFRESH_SECRET_KEY!, (err: any, decoded: any) => {
+        jwt.verify(token, getRefreshSecretKey(), (err: any, decoded: any) => {
             if (err) {
                 return res.status(403).json({
                     success: false,
