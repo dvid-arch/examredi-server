@@ -10,6 +10,9 @@ const app = express();
 const port = getPort();
 const allowedOrigins = getAllowedOrigins();
 
+// Trust Proxy for Render
+app.set('trust proxy', 1);
+
 // Security Middleware
 app.use(helmet());
 
