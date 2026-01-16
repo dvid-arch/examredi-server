@@ -1,15 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { TokenPayload } from '../types/index.js';
 import { getSecretKey } from '../config.js';
 
-
-
-export interface AuthRequest extends Request {
-    user?: TokenPayload;
-}
-
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({
@@ -30,7 +22,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
         });
     }
 
-    jwt.verify(token, getSecretKey(), (err: any, decoded: any) => {
+    jwt.verify(token, getSecretKey(), (err, decoded) => {
         if (err) {
             return res.status(401).json({
                 success: false,
@@ -39,12 +31,12 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
                 statusCode: 401
             });
         }
-        req.user = decoded as TokenPayload;
+        req.user = decoded;
         next();
     });
 };
 
-export const authorizeAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authorizeAdmin = (req, res, next) => {
     if (!req.user || req.user.role !== 'admin') {
         return res.status(403).json({
             success: false,

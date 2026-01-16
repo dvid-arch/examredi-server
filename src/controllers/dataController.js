@@ -1,9 +1,6 @@
-import { Request, Response } from 'express';
 import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
-import { AuthRequest } from '../middleware/auth.js';
-import { PerformanceEntry, User, Paper, Guide, RecentActivity } from '../types/index.js';
 
-export const getPerformance = (req: AuthRequest, res: Response) => {
+export const getPerformance = (req, res) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
@@ -13,8 +10,8 @@ export const getPerformance = (req: AuthRequest, res: Response) => {
         });
     }
 
-    const allPerformance = readData<PerformanceEntry>(FILE_NAMES.PERFORMANCE);
-    const userPerformance = allPerformance.filter(p => p.userId === req.user!.id);
+    const allPerformance = readData(FILE_NAMES.PERFORMANCE);
+    const userPerformance = allPerformance.filter(p => p.userId === req.user.id);
     res.json({
         success: true,
         message: 'Performance data retrieved successfully',
@@ -23,7 +20,7 @@ export const getPerformance = (req: AuthRequest, res: Response) => {
     });
 };
 
-export const savePerformance = (req: AuthRequest, res: Response) => {
+export const savePerformance = (req, res) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
@@ -34,9 +31,9 @@ export const savePerformance = (req: AuthRequest, res: Response) => {
     }
 
     const result = req.body;
-    const performanceLog = readData<PerformanceEntry>(FILE_NAMES.PERFORMANCE);
+    const performanceLog = readData(FILE_NAMES.PERFORMANCE);
 
-    const newEntry: PerformanceEntry = {
+    const newEntry = {
         id: Date.now().toString(),
         userId: req.user.id,
         score: result.score,
@@ -49,8 +46,8 @@ export const savePerformance = (req: AuthRequest, res: Response) => {
     writeData(FILE_NAMES.PERFORMANCE, performanceLog);
 
     // Update User Progress (Streak & Activity)
-    const users = readData<User>(FILE_NAMES.USERS);
-    const userIndex = users.findIndex(u => u.id === req.user!.id);
+    const users = readData(FILE_NAMES.USERS);
+    const userIndex = users.findIndex(u => u.id === req.user.id);
 
     if (userIndex !== -1) {
         const user = users[userIndex];
@@ -76,10 +73,10 @@ export const savePerformance = (req: AuthRequest, res: Response) => {
         }
 
         // Add to Recent Activity
-        const papers = readData<Paper>(FILE_NAMES.PAPERS);
+        const papers = readData(FILE_NAMES.PAPERS);
         const paper = papers.find(p => p.id === result.quizId);
 
-        const newActivity: RecentActivity = {
+        const newActivity = {
             id: `practice-${Date.now()}`,
             title: paper?.title || 'Practice Session',
             path: '/practice',
@@ -103,7 +100,7 @@ export const savePerformance = (req: AuthRequest, res: Response) => {
     });
 };
 
-export const getGuides = (req: Request, res: Response) => {
+export const getGuides = (req, res) => {
     const guides = readData(FILE_NAMES.GUIDES);
     res.json({
         success: true,
@@ -113,7 +110,7 @@ export const getGuides = (req: Request, res: Response) => {
     });
 };
 
-export const getLeaderboard = (req: Request, res: Response) => {
+export const getLeaderboard = (req, res) => {
     const leaderboard = readData(FILE_NAMES.LEADERBOARD);
     res.json({
         success: true,
@@ -123,9 +120,9 @@ export const getLeaderboard = (req: Request, res: Response) => {
     });
 };
 
-export const updateLeaderboard = (req: Request, res: Response) => {
+export const updateLeaderboard = (req, res) => {
     const newScore = req.body;
-    const leaderboard = readData<any>(FILE_NAMES.LEADERBOARD);
+    const leaderboard = readData(FILE_NAMES.LEADERBOARD);
     leaderboard.push(newScore);
     // Sort and limit
     leaderboard.sort((a, b) => b.score - a.score);
@@ -139,8 +136,8 @@ export const updateLeaderboard = (req: Request, res: Response) => {
     });
 };
 
-export const searchData = (req: Request, res: Response) => {
-    const query = (req.query.q as string || '').toLowerCase();
+export const searchData = (req, res) => {
+    const query = (req.query.q || '').toLowerCase();
 
     if (!query) {
         return res.json({
@@ -151,10 +148,10 @@ export const searchData = (req: Request, res: Response) => {
         });
     }
 
-    const papers = readData<Paper>(FILE_NAMES.PAPERS);
-    const guides = readData<Guide>(FILE_NAMES.GUIDES);
+    const papers = readData(FILE_NAMES.PAPERS);
+    const guides = readData(FILE_NAMES.GUIDES);
 
-    const questions: any[] = [];
+    const questions = [];
     papers.forEach(paper => {
         paper.questions.forEach(q => {
             const matchInQuestion = q.text.toLowerCase().includes(query);

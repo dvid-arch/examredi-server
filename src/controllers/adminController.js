@@ -1,14 +1,13 @@
-import { Request, Response } from 'express';
 import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
 
 // Stats
-export const getAdminStats = (req: Request, res: Response) => {
-    const users = readData<any>(FILE_NAMES.USERS);
-    const papers = readData<any>(FILE_NAMES.PAPERS);
-    const guides = readData<any>(FILE_NAMES.GUIDES);
+export const getAdminStats = (req, res) => {
+    const users = readData(FILE_NAMES.USERS);
+    const papers = readData(FILE_NAMES.PAPERS);
+    const guides = readData(FILE_NAMES.GUIDES);
 
     // In a real app we'd count questions across all papers
-    const totalQuestions = papers.reduce((acc: number, p: any) => acc + (p.questions?.length || 0), 0);
+    const totalQuestions = papers.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
 
     const stats = {
         users: users.length,
@@ -20,18 +19,18 @@ export const getAdminStats = (req: Request, res: Response) => {
 };
 
 // Users
-export const getAllUsers = (req: Request, res: Response) => {
-    const users = readData<any>(FILE_NAMES.USERS).map((u: any) => {
+export const getAllUsers = (req, res) => {
+    const users = readData(FILE_NAMES.USERS).map((u) => {
         const { password, ...rest } = u;
         return rest;
     });
     res.json(users);
 };
 
-export const updateUserSubscription = (req: Request, res: Response) => {
+export const updateUserSubscription = (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
-    const users = readData<any>(FILE_NAMES.USERS);
+    const users = readData(FILE_NAMES.USERS);
     const index = users.findIndex(u => u.id === id);
     if (index !== -1) {
         users[index].subscriptionStatus = status;
@@ -43,19 +42,19 @@ export const updateUserSubscription = (req: Request, res: Response) => {
     }
 };
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = (req, res) => {
     const { id } = req.params;
-    let users = readData<any>(FILE_NAMES.USERS);
+    let users = readData(FILE_NAMES.USERS);
     users = users.filter(u => u.id !== id);
     writeData(FILE_NAMES.USERS, users);
     res.json({ message: 'User deleted' });
 };
 
-export const saveUser = (req: Request, res: Response) => {
+export const saveUser = (req, res) => {
     // This is for admin creating/updating users directly
     const { id } = req.params; // If params has ID, it's update, else create (or body has ID)
     const userData = req.body;
-    let users = readData<any>(FILE_NAMES.USERS);
+    let users = readData(FILE_NAMES.USERS);
 
     if (id || userData.id) {
         const targetId = id || userData.id;
@@ -84,14 +83,14 @@ export const saveUser = (req: Request, res: Response) => {
 };
 
 // Papers
-export const getAllPapers = (req: Request, res: Response) => {
+export const getAllPapers = (req, res) => {
     const papers = readData(FILE_NAMES.PAPERS);
     res.json(papers);
 };
 
-export const savePaper = (req: Request, res: Response) => {
+export const savePaper = (req, res) => {
     const paper = req.body;
-    let papers = readData<any>(FILE_NAMES.PAPERS);
+    let papers = readData(FILE_NAMES.PAPERS);
     if (paper.id) {
         const index = papers.findIndex(p => p.id === paper.id);
         if (index !== -1) {
@@ -107,24 +106,24 @@ export const savePaper = (req: Request, res: Response) => {
     res.json(paper);
 };
 
-export const deletePaper = (req: Request, res: Response) => {
+export const deletePaper = (req, res) => {
     const { id } = req.params;
-    let papers = readData<any>(FILE_NAMES.PAPERS);
+    let papers = readData(FILE_NAMES.PAPERS);
     papers = papers.filter(p => p.id !== id);
     writeData(FILE_NAMES.PAPERS, papers);
     res.json({ message: 'Paper deleted' });
 };
 
-export const savePaperQuestion = (req: Request, res: Response) => {
+export const savePaperQuestion = (req, res) => {
     const { id } = req.params; // paperId
     const question = req.body;
-    let papers = readData<any>(FILE_NAMES.PAPERS);
+    let papers = readData(FILE_NAMES.PAPERS);
     const index = papers.findIndex(p => p.id === id);
 
     if (index !== -1) {
         if (!papers[index].questions) papers[index].questions = [];
 
-        const qIndex = papers[index].questions.findIndex((q: any) => q.id === question.id);
+        const qIndex = papers[index].questions.findIndex((q) => q.id === question.id);
         if (qIndex !== -1) {
             papers[index].questions[qIndex] = { ...papers[index].questions[qIndex], ...question };
         } else {
@@ -140,13 +139,13 @@ export const savePaperQuestion = (req: Request, res: Response) => {
 };
 
 // Guides
-export const getAllGuides = (req: Request, res: Response) => {
+export const getAllGuides = (req, res) => {
     const guides = readData(FILE_NAMES.GUIDES);
     res.json(guides);
 };
-export const saveGuide = (req: Request, res: Response) => {
+export const saveGuide = (req, res) => {
     const guide = req.body;
-    let guides = readData<any>(FILE_NAMES.GUIDES);
+    let guides = readData(FILE_NAMES.GUIDES);
     if (guide.id) {
         const index = guides.findIndex(g => g.id === guide.id);
         if (index !== -1) {
@@ -162,9 +161,9 @@ export const saveGuide = (req: Request, res: Response) => {
     res.json(guide);
 };
 
-export const deleteGuide = (req: Request, res: Response) => {
+export const deleteGuide = (req, res) => {
     const { id } = req.params;
-    let guides = readData<any>(FILE_NAMES.GUIDES);
+    let guides = readData(FILE_NAMES.GUIDES);
     guides = guides.filter(g => g.id !== id);
     writeData(FILE_NAMES.GUIDES, guides);
     res.json({ message: 'Guide deleted' });

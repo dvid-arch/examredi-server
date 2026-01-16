@@ -5,8 +5,8 @@ import { authenticate, authorizeAdmin } from '../middleware/auth.js';
 const router = Router();
 
 // Apply auth and admin check to all routes in this router
-router.use(authenticate as any);
-router.use(authorizeAdmin as any);
+router.use(authenticate);
+router.use(authorizeAdmin);
 
 router.get('/stats', getAdminStats);
 

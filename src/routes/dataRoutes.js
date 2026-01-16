@@ -6,8 +6,8 @@ import { handleValidationErrors } from '../middleware/errorHandler.js';
 
 const router = Router();
 
-router.get('/performance', authenticate as any, getPerformance);
-router.post('/performance', authenticate as any, validatePerformance, handleValidationErrors, savePerformance);
+router.get('/performance', authenticate, getPerformance);
+router.post('/performance', authenticate, validatePerformance, handleValidationErrors, savePerformance);
 router.get('/guides', getGuides);
 router.get('/search', searchData);
 router.get('/leaderboard', getLeaderboard);

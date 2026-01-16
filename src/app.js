@@ -1,13 +1,12 @@
 import 'dotenv/config';
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import path from 'path';
 
 import { getPort, getAllowedOrigins } from './config.js';
 
-const app: Express = express();
+const app = express();
 const port = getPort();
 const allowedOrigins = getAllowedOrigins();
 
@@ -28,12 +27,12 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 
 // Basic Route for testing
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
     res.send('ExamRedi Backend API is running');
 });
 
 // Health check endpoint for Render/Monitoring
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'UP',
         timestamp: new Date().toISOString(),

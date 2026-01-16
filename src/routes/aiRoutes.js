@@ -6,7 +6,7 @@ import { handleValidationErrors } from '../middleware/errorHandler.js';
 
 const router = Router();
 
-router.use(authenticate as any);
+router.use(authenticate);
 
 router.post('/chat', validateAIChat, handleValidationErrors, chatWithAI);
 router.post('/generate-guide', validateGenerateGuide, handleValidationErrors, generateStudyGuide);

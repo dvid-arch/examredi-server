@@ -1,6 +1,4 @@
-import { Request, Response } from 'express';
-
-export const chatWithAI = (req: Request, res: Response) => {
+export const chatWithAI = (req, res) => {
     const { message } = req.body;
     res.json({
         success: true,
@@ -12,7 +10,7 @@ export const chatWithAI = (req: Request, res: Response) => {
     });
 };
 
-export const generateStudyGuide = (req: Request, res: Response) => {
+export const generateStudyGuide = (req, res) => {
     const { topic } = req.body;
     res.json({
         success: true,
@@ -24,7 +22,7 @@ export const generateStudyGuide = (req: Request, res: Response) => {
     });
 };
 
-export const researchTopic = (req: Request, res: Response) => {
+export const researchTopic = (req, res) => {
     const { query } = req.body;
     res.json({
         success: true,

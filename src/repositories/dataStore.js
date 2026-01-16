@@ -19,7 +19,7 @@ export const initializeData = () => {
 
     // Seed initial users if not exists
     if (!fs.existsSync(USERS_FILE)) {
-        const initialUsers: any[] = [];
+        const initialUsers = [];
         fs.writeFileSync(USERS_FILE, JSON.stringify(initialUsers, null, 2));
     }
 
@@ -31,19 +31,19 @@ export const initializeData = () => {
     console.log('Data store initialized.');
 };
 
-export const readData = <T>(file: string): T[] => {
+export const readData = (file) => {
     try {
         const filePath = path.join(DATA_DIR, file);
         if (!fs.existsSync(filePath)) return [];
         const data = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(data) as T[];
+        return JSON.parse(data);
     } catch (error) {
         console.error(`Error reading ${file}:`, error);
         return [];
     }
 };
 
-export const writeData = <T>(file: string, data: T[]): void => {
+export const writeData = (file, data) => {
     try {
         const filePath = path.join(DATA_DIR, file);
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2));

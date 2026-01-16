@@ -1,24 +1,21 @@
-import { Request, Response } from 'express';
-import { AuthRequest } from '../middleware/auth.js';
 import { readData, writeData, FILE_NAMES } from '../repositories/dataStore.js';
-import { User, UserWithoutPassword, TokenPayload } from '../types/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import { getSecretKey, getRefreshSecretKey } from '../config.js';
 
 // Helper to generate tokens
-const generateTokens = (user: User) => {
-    const payload: TokenPayload = { id: user.id, email: user.email, role: user.role };
+const generateTokens = (user) => {
+    const payload = { id: user.id, email: user.email, role: user.role };
     const accessToken = jwt.sign(payload, getSecretKey(), { expiresIn: '15m' });
     const refreshToken = jwt.sign({ id: user.id }, getRefreshSecretKey(), { expiresIn: '7d' });
     return { accessToken, refreshToken };
 };
 
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = async (req, res) => {
     try {
         const { fullName, email, password, phone, educationalLevel, state, institution } = req.body;
-        const users = readData<User>(FILE_NAMES.USERS);
+        const users = readData(FILE_NAMES.USERS);
 
         if (users.find(u => u.email === email)) {
             res.status(400).json({
@@ -31,7 +28,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser: User = {
+        const newUser = {
             id: Date.now().toString(),
             fullName,
             email,
@@ -58,7 +55,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             success: true,
             message: 'Registration successful',
             data: {
-                user: userWithoutPassword as UserWithoutPassword,
+                user: userWithoutPassword,
                 ...tokens
             },
             statusCode: 201
@@ -75,10 +72,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const users = readData<User>(FILE_NAMES.USERS);
+        const users = readData(FILE_NAMES.USERS);
         const user = users.find(u => u.email === email);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -98,7 +95,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             success: true,
             message: 'Login successful',
             data: {
-                user: userWithoutPassword as UserWithoutPassword,
+                user: userWithoutPassword,
                 ...tokens
             },
             statusCode: 200
@@ -115,7 +112,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+export const refreshToken = async (req, res) => {
     try {
         const { token } = req.body;
         if (!token) {
@@ -129,7 +126,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
         }
 
         // Verify refresh token
-        jwt.verify(token, getRefreshSecretKey(), (err: any, decoded: any) => {
+        jwt.verify(token, getRefreshSecretKey(), (err, decoded) => {
             if (err) {
                 return res.status(403).json({
                     success: false,
@@ -139,7 +136,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
                 });
             }
 
-            const users = readData<User>(FILE_NAMES.USERS);
+            const users = readData(FILE_NAMES.USERS);
             const user = users.find(u => u.id === decoded.id);
 
             if (!user) {
@@ -171,7 +168,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     }
 };
 
-export const logout = (req: Request, res: Response) => {
+export const logout = (req, res) => {
     res.json({
         success: true,
         message: 'Logged out successfully',
@@ -179,16 +176,16 @@ export const logout = (req: Request, res: Response) => {
     });
 };
 
-export const getProfile = (req: AuthRequest, res: Response) => {
+export const getProfile = (req, res) => {
     if (req.user) {
-        const users = readData<User>(FILE_NAMES.USERS);
-        const user = users.find(u => u.id === req.user!.id);
+        const users = readData(FILE_NAMES.USERS);
+        const user = users.find(u => u.id === req.user.id);
         if (user) {
             const { password: _, ...userWithoutPassword } = user;
             res.json({
                 success: true,
                 message: 'Profile retrieved successfully',
-                data: userWithoutPassword as UserWithoutPassword,
+                data: userWithoutPassword,
                 statusCode: 200
             });
         } else {
