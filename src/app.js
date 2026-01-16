@@ -42,13 +42,13 @@ app.get('/health', (req, res) => {
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 import dataRoutes from './routes/dataRoutes.js';
-app.use('/data', dataRoutes);
+app.use('/api/data', dataRoutes);
 import aiRoutes from './routes/aiRoutes.js';
-app.use('/ai', aiRoutes);
+app.use('/api/ai', aiRoutes);
 import adminRoutes from './routes/adminRoutes.js';
-app.use('/admin', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Database Initialization (Mock)
 import { initializeData } from './repositories/dataStore.js';
