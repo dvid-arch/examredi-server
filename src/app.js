@@ -55,6 +55,17 @@ import { initializeData } from './repositories/dataStore.js';
 initializeData();
 
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+        success: false,
+        message: 'Server Error',
+        error: err.message || 'Internal Server Error',
+        statusCode: err.status || 500
+    });
+});
+
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
